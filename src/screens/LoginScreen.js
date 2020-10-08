@@ -8,9 +8,10 @@ import screens from '../helpers/screens';
 
 const LoginScreen = ({navigation: {navigate}}) => {
   const [email, setEmail] = React.useState('');
-  const textInputChange = () => {};
+  const [password, setPassword] = React.useState('');
   return (
-    <Container>
+    <Container
+      contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
       <Logo
         source={{uri: 'https://medtech.africa/logo.png'}}
         // resizeMode="cover"
@@ -28,8 +29,8 @@ const LoginScreen = ({navigation: {navigate}}) => {
       <FormInput
         icon="lock"
         placeholder="Password"
-        label="Password"
-        onChangeText={(userEmail) => setEmail(userEmail)}
+        label={password}
+        onChangeText={(pass) => setPassword(pass)}
         secureTextEntry
       />
       <FormButton title="Login" onPress={() => {}} />
@@ -59,12 +60,10 @@ const LoginScreen = ({navigation: {navigate}}) => {
 
 export default LoginScreen;
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
   background-color: #fff;
-  justify-content: center;
   padding: ${wp('10%')}px;
-  align-items: center;
 `;
 const Text = styled.Text`
   font-size: 16px;
