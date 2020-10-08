@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import {View} from 'react-native';
 import screens from '../helpers/screens';
 import LoginScreen from '../screens/LoginScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import AsyncStorage from '@react-native-community/async-storage';
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 
 const Stack = createStackNavigator();
 const AuthStack = () => {
@@ -36,7 +38,29 @@ const AuthStack = () => {
       initialRouteName={isNewUser ? screens.onboarding : screens.login}>
       <Stack.Screen name={screens.onboarding} component={OnboardingScreen} />
       <Stack.Screen name={screens.login} component={LoginScreen} />
-      <Stack.Screen name={screens.register} component={RegisterScreen} />
+      <Stack.Screen
+        name={screens.register}
+        component={RegisterScreen}
+        options={({navigation}) => ({
+          title: '',
+          headerStyle: {
+            backgroundColor: '#f9fafd',
+            shadowColor: '#f9fafd',
+            elevation: 0,
+          },
+          headerLeft: () => (
+            <View>
+              <FontAwesome.Button
+                name="long-arrow-left"
+                size={25}
+                backgroundColor="#f9fafd"
+                color="#333"
+                onPress={() => navigation.navigate(screens.login)}
+              />
+            </View>
+          ),
+        })}
+      />
     </Stack.Navigator>
   );
 };
