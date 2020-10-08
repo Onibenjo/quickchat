@@ -1,19 +1,24 @@
 import React from 'react';
-import {View, StyleSheet, Text, TextInput, Platform} from 'react-native';
+import {View, StyleSheet, Text, TextInput} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-export default function InputFieldWithLabelComponent(props) {
+export default function InputFieldWithLabelComponent({
+  label,
+  placeholder,
+  defaultValue,
+  onChangeText,
+}) {
   return (
     <View style={styles.spacing}>
-      <Text style={styles.inputLabel}>{props.label}</Text>
+      {label && <Text style={styles.inputLabel}>{label}</Text>}
       <TextInput
         style={styles.inputBox}
-        placeholder={props.placeholder}
-        defaultValue={props.defaultValue}
-        onChangeText={props.onChangeText}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        onChangeText={onChangeText}
       />
     </View>
   );

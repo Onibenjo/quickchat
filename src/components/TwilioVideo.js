@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,14 +13,13 @@ import {
   TwilioVideo,
 } from 'react-native-twilio-video-webrtc';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
-import normalize from 'react-native-normalize';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import InputWithLabel from './staticComponents/InputWithLabel';
-import OfflineNotice from './staticComponents/OfflineNotice';
+import InputWithLabel from './TextInputWithLabel';
+import OfflineNotice from './OfflineNotice';
 
 export async function getAllPermissions() {
   try {
@@ -36,8 +35,8 @@ export async function getAllPermissions() {
   return null;
 }
 
-export default class TwilioVideo extends Component {
-  state = {
+const TwilioVideoDisplay = () => {
+  const [state, setState] = useState({
     isAudioEnabled: true,
     isVideoEnabled: true,
     isButtonDisplay: true,
@@ -46,50 +45,56 @@ export default class TwilioVideo extends Component {
     videoTracks: new Map(),
     roomName: '',
     token: '',
-  };
+  });
 
-  componentDidMount() {
+  const twilioVideoRef = useRef(null);
+
+  useEffect(() => {
     getAllPermissions();
-  }
+  }, []);
 
-  _onConnectButtonPress = () => {
-    this.refs.twilioVideo.connect({
-      roomName: this.state.roomName,
-      accessToken: this.state.token,
+  const updateState = (newState) => {
+    setState({...state, ...newState});
+  };
+
+  const onConnectButtonPress = () => {
+    twilioVideoRef.connect({
+      roomName: state.roomName,
+      accessToken: state.token,
     });
-    this.setState({status: 'connecting'});
+    updateState({status: 'connecting'});
   };
 
-  _onEndButtonPress = () => {
-    this.refs.twilioVideo.disconnect();
+  const onEndButtonPress = () => {
+    twilioVideoRef.disconnect();
   };
 
-  _onMuteButtonPress = () => {
-    this.refs.twilioVideo
-      .setLocalAudioEnabled(!this.state.isAudioEnabled)
-      .then((isEnabled) => this.setState({isAudioEnabled: isEnabled}));
+  const onMuteButtonPress = () => {
+    twilioVideoRef
+      .setLocalAudioEnabled(!state.isAudioEnabled)
+      .then((isEnabled) => updateState({isAudioEnabled: isEnabled}));
   };
 
-  _onFlipButtonPress = () => {
-    this.refs.twilioVideo.flipCamera();
+  const onFlipButtonPress = () => {
+    twilioVideoRef.flipCamera();
   };
 
-  _onRoomDidConnect = () => {
-    this.setState({status: 'connected'});
+  const onRoomDidConnect = () => {
+    updateState({status: 'connected'});
   };
 
-  _onRoomDidDisconnect = ({roomName, error}) => {
-    this.setState({status: 'disconnected'});
+  const onRoomDidDisconnect = ({roomName, error}) => {
+    updateState({status: 'disconnected'});
   };
 
-  _onRoomDidFailToConnect = (error) => {
-    this.setState({status: 'disconnected'});
+  const onRoomDidFailToConnect = (error) => {
+    updateState({status: 'disconnected'});
   };
 
-  _onParticipantAddedVideoTrack = ({participant, track}) => {
-    this.setState({
+  const onParticipantAddedVideoTrack = ({participant, track}) => {
+    updateState({
       videoTracks: new Map([
-        ...this.state.videoTracks,
+        ...state.videoTracks,
         [
           track.trackSid,
           {participantSid: participant.sid, videoTrackSid: track.trackSid},
@@ -98,123 +103,123 @@ export default class TwilioVideo extends Component {
     });
   };
 
-  _onParticipantRemovedVideoTrack = ({participant, track}) => {
-    const videoTracks = this.state.videoTracks;
+  const onParticipantRemovedVideoTrack = ({participant, track}) => {
+    const videoTracks = state.videoTracks;
     videoTracks.delete(track.trackSid);
-    this.setState({videoTracks: {...videoTracks}});
+    updateState({videoTracks: {...videoTracks}});
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <OfflineNotice />
-        {this.state.status === 'disconnected' && (
-          <View>
-            <Text style={styles.headerStyle}>React Native Twilio Video</Text>
-            <InputWithLabel
-              label="Room Name"
-              placeholder="Room Name"
-              defaultValue={this.state.roomName}
-              onChangeText={(text) => this.setState({roomName: text})}
-            />
-            <InputWithLabel
-              label="Token"
-              placeholder="Token"
-              defaultValue={this.state.token}
-              onChangeText={(text) => this.setState({token: text})}
-            />
-            <TouchableHighlight
-              style={[styles.buttonContainer, styles.loginButton]}
-              onPress={this._onConnectButtonPress}>
-              <Text style={styles.Buttontext}>Connect</Text>
-            </TouchableHighlight>
-          </View>
-        )}
-        {(this.state.status === 'connected' ||
-          this.state.status === 'connecting') && (
-          <View style={styles.callContainer}>
-            {this.state.status === 'connected' && (
-              <View style={styles.remoteGrid}>
-                <TouchableOpacity
-                  style={styles.remoteVideo}
-                  onPress={() => {
-                    this.setState({
-                      isButtonDisplay: !this.state.isButtonDisplay,
-                    });
-                  }}>
-                  {Array.from(
-                    this.state.videoTracks,
-                    ([trackSid, trackIdentifier]) => {
-                      return (
-                        <TwilioVideoParticipantView
-                          style={styles.remoteVideo}
-                          key={trackSid}
-                          trackIdentifier={trackIdentifier}
-                        />
-                      );
-                    },
-                  )}
-                </TouchableOpacity>
-                <TwilioVideoLocalView
-                  enabled={true}
-                  style={[
-                    styles.localVideo,
-                    {bottom: this.state.isButtonDisplay ? '40%' : '30%'},
-                  ]}
-                />
-              </View>
-            )}
-            <View
-              style={[
-                styles.callScreenButtonContainer,
-                {
-                  display: this.state.isButtonDisplay ? 'flex' : 'none',
-                  zIndex: this.state.isButtonDisplay ? 2 : 0,
-                },
-              ]}>
+  return (
+    <View style={styles.container}>
+      <OfflineNotice />
+      {state.status === 'disconnected' && (
+        <View>
+          <Text style={styles.headerStyle}>React Native Twilio Video</Text>
+          <InputWithLabel
+            label="Room Name"
+            placeholder="Room Name"
+            defaultValue={state.roomName}
+            onChangeText={(text) => updateState({roomName: text})}
+          />
+          <InputWithLabel
+            label="Token"
+            placeholder="Token"
+            defaultValue={state.token}
+            onChangeText={(text) => updateState({token: text})}
+          />
+          <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}
+            onPress={onConnectButtonPress}>
+            <Text style={styles.Buttontext}>Connect</Text>
+          </TouchableHighlight>
+        </View>
+      )}
+      {(state.status === 'connected' || state.status === 'connecting') && (
+        <View style={styles.callContainer}>
+          {state.status === 'connected' && (
+            <View style={styles.remoteGrid}>
               <TouchableOpacity
-                style={[
-                  styles.buttonStyle,
-                  {display: this.state.isButtonDisplay ? 'flex' : 'none'},
-                ]}
-                onPress={this._onMuteButtonPress}>
-                <MIcon
-                  name={this.state.isAudioEnabled ? 'mic' : 'mic-off'}
-                  size={24}
-                  color="#fff"
-                />
+                style={styles.remoteVideo}
+                onPress={() => {
+                  updateState({
+                    isButtonDisplay: !state.isButtonDisplay,
+                  });
+                }}>
+                {Array.from(
+                  state.videoTracks,
+                  ([trackSid, trackIdentifier]) => {
+                    return (
+                      <TwilioVideoParticipantView
+                        style={styles.remoteVideo}
+                        key={trackSid}
+                        trackIdentifier={trackIdentifier}
+                      />
+                    );
+                  },
+                )}
               </TouchableOpacity>
-              <TouchableOpacity
+              <TwilioVideoLocalView
+                enabled={true}
                 style={[
-                  styles.buttonStyle,
-                  {display: this.state.isButtonDisplay ? 'flex' : 'none'},
+                  styles.localVideo,
+                  {bottom: state.isButtonDisplay ? '40%' : '30%'},
                 ]}
-                onPress={this._onEndButtonPress}>
-                <MIcon name="call-end" size={28} color="#fff" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.buttonStyle,
-                  {display: this.state.isButtonDisplay ? 'flex' : 'none'},
-                ]}
-                onPress={this._onFlipButtonPress}>
-                <MCIcon name="rotate-3d" size={28} color="#fff" />
-              </TouchableOpacity>
+              />
             </View>
+          )}
+          <View
+            style={[
+              styles.callScreenButtonContainer,
+              {
+                display: state.isButtonDisplay ? 'flex' : 'none',
+                zIndex: state.isButtonDisplay ? 2 : 0,
+              },
+            ]}>
+            <TouchableOpacity
+              style={[
+                styles.buttonStyle,
+                {display: state.isButtonDisplay ? 'flex' : 'none'},
+              ]}
+              onPress={onMuteButtonPress}>
+              <MIcon
+                name={state.isAudioEnabled ? 'mic' : 'mic-off'}
+                size={24}
+                color="#fff"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.buttonStyle,
+                {display: state.isButtonDisplay ? 'flex' : 'none'},
+              ]}
+              onPress={onEndButtonPress}>
+              <MIcon name="call-end" size={28} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.buttonStyle,
+                {display: state.isButtonDisplay ? 'flex' : 'none'},
+              ]}
+              onPress={onFlipButtonPress}>
+              <MCIcon name="rotate-3d" size={28} color="#fff" />
+            </TouchableOpacity>
           </View>
-        )}
-        <TwilioVideo
-          ref="twilioVideo"
-          onRoomDidConnect={this._onRoomDidConnect}
-          onRoomDidDisconnect={this._onRoomDidDisconnect}
-          onRoomDidFailToConnect={this._onRoomDidFailToConnect}
-          onParticipantAddedVideoTrack={this._onParticipantAddedVideoTrack}
-          onParticipantRemovedVideoTrack={this._onParticipantRemovedVideoTrack}
-        />
-      </View>
-    );
-  }
-}
+        </View>
+      )}
+      <TwilioVideo
+        ref={twilioVideoRef}
+        onRoomDidConnect={onRoomDidConnect}
+        onRoomDidDisconnect={onRoomDidDisconnect}
+        onRoomDidFailToConnect={onRoomDidFailToConnect}
+        onParticipantAddedVideoTrack={onParticipantAddedVideoTrack}
+        onParticipantRemovedVideoTrack={onParticipantRemovedVideoTrack}
+      />
+    </View>
+  );
+};
+
+export default TwilioVideoDisplay;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -260,7 +265,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   buttonContainer: {
-    height: normalize(45),
+    height: 45,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
