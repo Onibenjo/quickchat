@@ -34,10 +34,21 @@ const AuthStack = () => {
   }
   return (
     <Stack.Navigator
-      headerMode="none"
       initialRouteName={isNewUser ? screens.onboarding : screens.login}>
-      <Stack.Screen name={screens.onboarding} component={OnboardingScreen} />
-      <Stack.Screen name={screens.login} component={LoginScreen} />
+      <Stack.Screen
+        name={screens.onboarding}
+        component={OnboardingScreen}
+        options={{
+          header: () => null,
+        }}
+      />
+      <Stack.Screen
+        name={screens.login}
+        component={LoginScreen}
+        options={{
+          header: () => null,
+        }}
+      />
       <Stack.Screen
         name={screens.register}
         component={RegisterScreen}

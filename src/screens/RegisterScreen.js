@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Alert, TouchableOpacity} from 'react-native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
 import FormButton from '../components/Button/FormButton';
@@ -11,6 +11,13 @@ const RegisterScreen = ({navigation: {navigate}}) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [password2, setPassword2] = React.useState('');
+
+  const handleRegister = () => {
+    if (password !== password2) {
+      Alert.alert('Passwords do not match', 'Please, crosscheck passwords');
+    }
+  };
+
   return (
     <Container
       contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
@@ -18,7 +25,8 @@ const RegisterScreen = ({navigation: {navigate}}) => {
         source={{uri: 'https://medtech.africa/logo.png'}}
         // resizeMode="cover"
       />
-      <Text>Quick Chat</Text>
+      <Text>Create an account</Text>
+      {/* imput fields */}
       <FormInput
         icon="user"
         placeholder="Email"
@@ -42,7 +50,9 @@ const RegisterScreen = ({navigation: {navigate}}) => {
         onChangeText={(pass) => setPassword2(pass)}
         secureTextEntry
       />
-      <FormButton title="Register" onPress={() => {}} />
+      {/* formm button */}
+      <FormButton title="Register" onPress={handleRegister} />
+      {/* terms and conditon */}
       <PrivacyWrapper>
         <TextPrivate>
           By registering, you confirm that you agree to the{' '}
@@ -50,11 +60,12 @@ const RegisterScreen = ({navigation: {navigate}}) => {
         <TouchableOpacity>
           <TextPrivate orange>Terms of service</TextPrivate>
         </TouchableOpacity>
-        <Text>and</Text>
+        <TextPrivate> and </TextPrivate>
         <TouchableOpacity>
           <TextPrivate orange>Privacy Policy</TextPrivate>
         </TouchableOpacity>
       </PrivacyWrapper>
+      {/* social media logins */}
       <SocialButton
         title="Signup with Google"
         icon="google"
@@ -69,7 +80,8 @@ const RegisterScreen = ({navigation: {navigate}}) => {
         backgroundColor="#e6eaf4"
         onPress={() => {}}
       />
-      <ForgotPasswordBtn onPress={() => navigate(screens.register)}>
+      {/* login */}
+      <ForgotPasswordBtn onPress={() => navigate(screens.login)}>
         <ButtonText>Have an account? Login</ButtonText>
       </ForgotPasswordBtn>
     </Container>
@@ -81,7 +93,7 @@ export default RegisterScreen;
 const Container = styled.ScrollView`
   flex: 1;
   background-color: #fff;
-  padding: ${wp('10%')}px;
+  padding: ${wp(10)}px;
 `;
 const Text = styled.Text`
   font-size: 16px;
@@ -108,12 +120,12 @@ const ButtonText = styled.Text`
 const TextPrivate = styled.Text`
   font-size: 13px;
   font-weight: 400;
-  color: ${(props) => (props.orange ? '#e88832' : gray)};
+  color: ${(props) => (props.orange ? '#e88832' : 'gray')};
   font-family: Lato-Regular;
 `;
 const PrivacyWrapper = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  margin-vertical: 35;
+  margin-vertical: 35px;
   justify-content: center;
 `;
