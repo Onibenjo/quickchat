@@ -1,26 +1,58 @@
 import React from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import FormButton from '../components/Button/FormButton';
 import SocialButton from '../components/Button/SocialButton';
 import FormInput from '../components/Input/FormInput';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import screens from '../helpers/screens';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation: {navigate}}) => {
+  const [email, setEmail] = React.useState('');
   const textInputChange = () => {};
   return (
     <Container>
-      <Logo source={{uri: 'https://medtech.africa/logo.png'}} />
+      <Logo
+        source={{uri: 'https://medtech.africa/logo.png'}}
+        // resizeMode="cover"
+      />
       <Text>Quick Chat</Text>
-      <FormInput icon="heart" placeholder="Email" label="Email" />
-      <FormInput icon="heart" placeholder="Password" label="Password" />
-      <FormButton title="Login" />
+      <FormInput
+        icon="user"
+        placeholder="Email"
+        label={email}
+        onChangeText={(userEmail) => setEmail(userEmail)}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      <FormInput
+        icon="lock"
+        placeholder="Password"
+        label="Password"
+        onChangeText={(userEmail) => setEmail(userEmail)}
+        secureTextEntry
+      />
+      <FormButton title="Login" onPress={() => {}} />
+      <ForgotPasswordBtn>
+        <ButtonText>Forgot Password?</ButtonText>
+      </ForgotPasswordBtn>
       <SocialButton
         title="Google"
         icon="google"
-        //  color=""
-        backgroundColor="red"
+        color="#de4d41"
+        backgroundColor="#f5e7ea"
+        onPress={() => {}}
       />
+      <SocialButton
+        title="Facebook"
+        icon="facebook"
+        color="#4867aa"
+        backgroundColor="#e6eaf4"
+        onPress={() => {}}
+      />
+      <ForgotPasswordBtn onPress={() => navigate(screens.register)}>
+        <ButtonText>Don't have an account? Create here</ButtonText>
+      </ForgotPasswordBtn>
     </Container>
   );
 };
@@ -47,15 +79,12 @@ const Logo = styled.Image`
   width: 150px;
   resize-mode: cover;
 `;
-// navButton: {
-//   marginTop: 15;
-// };
-// forgotButton: {
-//   marginVertical: 35;
-// };
-// navButtonText: {
-//   fontSize: 18;
-//   fontWeight: 500;
-//   color: #2e64e5;
-//   fontFamily: Lato-Regular;
-// };
+const ForgotPasswordBtn = styled.TouchableOpacity`
+  margin-vertical: 35px;
+`;
+const ButtonText = styled.Text`
+  font-size: 18px;
+  font-weight: 500;
+  color: #2e64e5;
+  font-family: Lato-Regular;
+`;
