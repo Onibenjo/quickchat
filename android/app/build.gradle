@@ -1,6 +1,8 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
 
+
+
 import com.android.build.OutputFile
 
 /**
@@ -84,6 +86,11 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 
+// vector icons
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'AntDesign.ttf','Feather.ttf','FontAwesome.ttf','Ionicons.ttf','MaterialCommunityIcons.ttf' ] 
+]
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
