@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, Image} from 'react-native';
+import {StyleSheet, Image, Text} from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
-import Svg from '../assets/text_re.svg';
 
 const OnboardingScreen = () => {
   return (
     <>
+      <Text>hhhh</Text>
       <Onboarding
         pages={[
           {
