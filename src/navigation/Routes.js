@@ -12,17 +12,20 @@ const Routes = () => {
   const {user, setUser} = useAuth();
 
   // Handle user state changes
-  const onAuthStateChanged = (fbUser) => {
-    setUser(fbUser);
-    if (initializing) {
-      setInitializing(false);
-    }
-  };
+  const onAuthStateChanged = React.useCallback(
+    (fbUser) => {
+      setUser(fbUser);
+      if (initializing) {
+        setInitializing(false);
+      }
+    },
+    [initializing, setUser],
+  );
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
-  }, []);
+  }, [onAuthStateChanged]);
 
   if (initializing) {
     return null;

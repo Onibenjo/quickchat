@@ -12,8 +12,6 @@ function ProvideAuth({children}) {
   const [user, setUser] = useState(null);
   const context = useMemo(
     () => ({
-      user,
-      setUser,
       login: async (email, password) => {
         try {
           await auth().signInWithEmailAndPassword(email, password);
@@ -40,7 +38,9 @@ function ProvideAuth({children}) {
   );
 
   return (
-    <authContext.Provider value={{...context}}>{children}</authContext.Provider>
+    <authContext.Provider value={{...context, user, setUser}}>
+      {children}
+    </authContext.Provider>
   );
 }
 
