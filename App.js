@@ -4,11 +4,10 @@ import Providers from './src/navigation';
 
 const App = () => {
   return (
-    <View style={{flex: 1, backgroundColor: '#000'}}>
+    <>
       <StatusBar barStyle="dark-content" />
-      <Text style={{color: '#000'}}>jjj</Text>
-      {/* <Providers /> */}
-    </View>
+      <Providers />
+    </>
   );
 };
 
