@@ -18,7 +18,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import InputWithLabel from './TextInputWithLabel';
+import InputWithLabel from './Input/TextInputWithLabel';
 import OfflineNotice from './OfflineNotice';
 
 export async function getAllPermissions() {
