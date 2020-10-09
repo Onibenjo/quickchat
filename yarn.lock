@@ -5939,7 +5939,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6062,10 +6062,11 @@ react-native-screens@^2.11.0:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.11.0.tgz#34b30b07c2d04aa100cba984b944b303bfa43ea6"
   integrity sha512-vJzJE3zI1XUtqthrX3Dh2TBQWB+xFyaGhF52KBq9FjJUN5ws4xpLZJxBWa1KbGV3DilmcSZ4jmZR5LGordwE7w==
 
-react-native-twilio-video-webrtc@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-twilio-video-webrtc/-/react-native-twilio-video-webrtc-1.0.1.tgz#f397d05b4cd4b73c7bb5a1ef131d0c1bfbf301fb"
-  integrity sha1-85fQW0zUtzx7taHvEx0MG/vzAfs=
+"react-native-twilio-video-webrtc@https://github.com/blackuy/react-native-twilio-video-webrtc":
+  version "1.0.2-1"
+  resolved "https://github.com/blackuy/react-native-twilio-video-webrtc#d99cc0ea2c0625a9cf79672f60b58202bccf612e"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-vector-icons@^7.1.0:
   version "7.1.0"
