@@ -4,11 +4,13 @@ import styled from 'styled-components/native';
 import FormButton from '../components/Button/FormButton';
 import SocialButton from '../components/Button/SocialButton';
 import FormInput from '../components/Input/FormInput';
+import {useAuth} from '../context/auth';
 import screens from '../helpers/screens';
 
 const LoginScreen = ({navigation: {navigate}}) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const {login} = useAuth();
   return (
     <Container
       contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
@@ -33,7 +35,12 @@ const LoginScreen = ({navigation: {navigate}}) => {
         onChangeText={(pass) => setPassword(pass)}
         secureTextEntry
       />
-      <FormButton title="Login" onPress={() => {}} />
+      <FormButton
+        title="Login"
+        onPress={() => {
+          login(email, password);
+        }}
+      />
       <ForgotPasswordBtn>
         <ButtonText>Forgot Password?</ButtonText>
       </ForgotPasswordBtn>

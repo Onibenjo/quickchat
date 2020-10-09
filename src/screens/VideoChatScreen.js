@@ -1,8 +1,13 @@
 import React from 'react';
 import TwilioVideoDisplay from '../components/TwilioVideoDisplay';
+import {NetworkProvider} from 'react-native-offline';
 
 const VideoChatScreen = () => {
-  return <TwilioVideoDisplay />;
+  return (
+    <NetworkProvider>
+      <TwilioVideoDisplay />
+    </NetworkProvider>
+  );
 };
 
 export default VideoChatScreen;
