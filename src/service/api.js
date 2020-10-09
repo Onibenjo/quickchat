@@ -31,7 +31,28 @@ const fetchWithToken = async (url, {body, ...params} = {}) => {
   //     });
   //   }
   // else etch with a designated url
-  return window.fetch(url, config).then(async (response) => {
+  return fetch(url, config).then(async (response) => {
+    const data = await response.json();
+    if (response.ok) {
+      return data;
+    }
+    return Promise.reject(data);
+  });
+};
+const fetchApi = async (url, {body, ...params} = {}) => {
+  const headers = {'content-type': 'application/json'};
+  const config = {
+    method: body ? 'POST' : 'GET',
+    ...params,
+    headers: {
+      ...headers,
+      ...params.headers,
+    },
+  };
+  if (body) {
+    config.body = JSON.stringify(body);
+  }
+  return fetch(url, config).then(async (response) => {
     const data = await response.json();
     if (response.ok) {
       return data;
@@ -42,18 +63,25 @@ const fetchWithToken = async (url, {body, ...params} = {}) => {
 
 const getVideoToken = async ({identity, room}) => {
   try {
-    const result = await fetchWithToken(
-      'https://europe-west1-medtech-f46d7.cloudfunctions.net/api/user/get-token',
-      {
-        body: {
-          identity,
-          room,
-        },
+    // const result = await fetchWithToken(
+    //   'https://europe-west1-medtech-f46d7.cloudfunctions.net/api/user/get-token',
+    //   {
+    //     body: {
+    //       identity,
+    //       room,
+    //     },
+    //   },
+    // );
+    return fetchApi('https://emerald-moose-2587.twil.io/token', {
+      // mode: 'cors',
+      body: {
+        identity,
+        room,
       },
-    );
-    return result;
+    });
   } catch (error) {
-    console.log(error);
+    console.log({error});
+    return Promise.reject(error);
   }
 };
 

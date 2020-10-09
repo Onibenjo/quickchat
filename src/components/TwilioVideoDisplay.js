@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   TouchableHighlight,
+  Alert,
 } from 'react-native';
 import {
   TwilioVideoLocalView,
@@ -45,6 +46,7 @@ const TwilioVideoDisplay = () => {
     participants: new Map(),
     videoTracks: new Map(),
     roomName: '',
+    identity: '',
     token: '',
   });
 
@@ -58,13 +60,22 @@ const TwilioVideoDisplay = () => {
     setState({...state, ...newState});
   };
 
-  const onConnectButtonPress = () => {
-    getVideoToken({identity: state.identity, room: state.roomName});
-    twilioVideoRef.current.connect({
-      roomName: state.roomName,
-      accessToken: state.token,
-    });
-    updateState({status: 'connecting'});
+  const onConnectButtonPress = async () => {
+    try {
+      const accessToken = await getVideoToken({
+        identity: state.identity,
+        room: state.roomName,
+      });
+      console.log({accessToken});
+      twilioVideoRef.current.connect({
+        roomName: state.roomName,
+        accessToken,
+      });
+      updateState({status: 'connecting'});
+    } catch (e) {
+      console.log({e});
+      Alert.alert('Error', e.message);
+    }
   };
 
   const onEndButtonPress = () => {
