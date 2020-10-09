@@ -5,8 +5,9 @@ import Providers from './src/navigation';
 const App = () => {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" translucent />
       <Providers />
+      {/* <Text>usdfhwsgbsgnvli</Text> */}
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components/native';
+import styled from 'styled-components';
 import {windowHeight} from '../../helpers/dimensions';
 import tailwind from 'tailwind-rn';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';

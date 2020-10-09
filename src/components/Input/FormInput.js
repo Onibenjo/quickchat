@@ -1,5 +1,4 @@
 import React from 'react';
-import {View, Text} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components';
 import tailwind from 'tailwind-rn';

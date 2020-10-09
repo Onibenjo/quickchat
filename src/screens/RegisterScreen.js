@@ -93,7 +93,7 @@ export default RegisterScreen;
 const Container = styled.ScrollView`
   flex: 1;
   background-color: #fff;
-  padding: ${wp(10)}px;
+  padding: 0 ${wp(10)}px;
 `;
 const Text = styled.Text`
   font-size: 16px;

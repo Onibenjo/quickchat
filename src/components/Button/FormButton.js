@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text} from 'react-native';
-import styled from 'styled-components/native';
+import styled from 'styled-components';
 import {windowHeight} from '../../helpers/dimensions';
 import tailwind from 'tailwind-rn';
 

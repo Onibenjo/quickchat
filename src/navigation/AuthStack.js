@@ -6,7 +6,7 @@ import LoginScreen from '../screens/LoginScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import AsyncStorage from '@react-native-community/async-storage';
-import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Stack = createStackNavigator();
 const AuthStack = () => {
